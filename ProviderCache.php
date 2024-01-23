@@ -65,10 +65,11 @@ class ProviderCache implements Provider
     final public function geocodeQuery(GeocodeQuery $query): Collection
     {
         $cacheKey = $this->getCacheKey($query);
-        if (null !== $result = $this->cache->get($cacheKey)) {
-            $result->setFromCache(true);
-            
-            return $result;
+        $cacheResult = $this->cache->get($cacheKey);
+        if (is_a($cacheResult, Collection::class)) {
+            $cacheResult->setFromCache(true);
+
+            return $cacheResult;
         }
 
         $result = $this->realProvider->geocodeQuery($query);
